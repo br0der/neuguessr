@@ -6,14 +6,12 @@ import { api } from "~/utils/api";
 import { Header } from "../components/Header";
 // import { Map } from "../components/Map";
 import MapComponent from "../components/MapComponent";
-import { Main } from "next/document";
+// import { Main } from "next/document";
 
 
 export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
-  var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
-
-  
+  // const hello = api.post.hello.useQuery({ text: "from tRPC" });
+  // var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
   return (
     <>
