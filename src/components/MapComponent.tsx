@@ -1,49 +1,69 @@
 // src/components/MapComponent.tsx
 import React, { useEffect, useRef } from "react";
-import mapboxgl, { GeoJSONSourceRaw } from "mapbox-gl";
+import mapboxgl, { GeoJSONSourceRaw, Marker, NavigationControl, Point } from "mapbox-gl";
+import { useState } from "react";
 
 interface MovingObject {
-  id: number;
-  name: string;
-  coordinates: number[];
+    id: number;
+    name: string;
+    coordinates: number[];
 }
 
+
+
+
 const MapComponent: React.FC = () => {
-  const mapContainer = useRef<HTMLDivElement>(null);
+    const mapContainer = useRef<HTMLDivElement>(null);
+    let marker: Marker | null;
 
-  const movingObjects: MovingObject[] = [
-    // Define your moving objects here
-  ];
+    useEffect(() => {
+        mapboxgl.accessToken = "pk.eyJ1IjoiYnJvZGVyIiwiYSI6ImNsdjAydnA4OTFpYnUyam53aGttdTY2YXEifQ.RbaS01yNmJsVRsCKgpEP2A";
 
-  useEffect(() => {
-    mapboxgl.accessToken = "pk.eyJ1IjoiYnJvZGVyIiwiYSI6ImNsdjAydnA4OTFpYnUyam53aGttdTY2YXEifQ.RbaS01yNmJsVRsCKgpEP2A";
+        if (mapContainer.current) {
+            
 
-    if (mapContainer.current) {
-      const map = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: "mapbox://styles/broder/clv02zzsz00zu01nrgbirc6w3",
-        center: [-71.08829, 42.34009],
-        zoom: 14,
-        maxZoom: 18,
-        minZoom: 14,
-      });
+            const bounds = [
+                [-71, 42], // Southwest coordinates
+                [-72, 43] // Northeast coordinates
+            ];
+        
+            const map = new mapboxgl.Map({
+                container: mapContainer.current,
+                style: "mapbox://styles/broder/clv02zzsz00zu01nrgbirc6w3",
+                center: [-71.08829, 42.34009],
+                zoom: 14,
+                maxZoom: 18,
+                minZoom: 14,
+            });
+            const control = new NavigationControl({
+                showZoom: false,
+                showCompass: false
+            });
+            map.addControl(control, 'top-right');
 
-      // Add zoom controls
-      map.addControl(new mapboxgl.NavigationControl(), "top-left");
+            map.on('click', (e) => {
+                if (marker != null) {
+                    marker.remove();
+                }
+                marker = new mapboxgl.Marker({
+                    color: "#FF0000",
+                    scale: 0.5
+                }).setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map);
+            })
 
-      // Add your custom markers and lines here
+            // Clean up on unmount
+            return () => map.remove();
+        }
+    }, []);
 
-      // Clean up on unmount
-      return () => map.remove();
-    }
-  }, []);
-
-  return (
-    <div
-      ref={mapContainer}
-      style={{ width: "400px", height: "300px"}}
-    />
-  );
+    return (
+        <>
+            <div
+                ref={mapContainer}
+                style={{ width: "400px", height: "300px" }}
+            />
+        </>
+    );
 };
 
 export default MapComponent;

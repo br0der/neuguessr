@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import { api } from "~/utils/api";
 import { Header } from "../components/Header";
-// import { Map } from "../components/Map";
 import MapComponent from "../components/MapComponent";
 // import { Main } from "next/document";
 
