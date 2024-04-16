@@ -66,5 +66,5 @@ function AuthShowcase() {
 npm run dev
 git add -A
 git commit -m "message"
-git push -u origin main
+git push origin main
 */
