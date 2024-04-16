@@ -5,6 +5,7 @@ import Link from "next/link";
 import { api } from "~/utils/api";
 import { Header } from "../components/Header";
 import MapComponent from "../components/MapComponent";
+import Image from "../components/Image";
 // import { Main } from "next/document";
 
 
@@ -22,10 +23,17 @@ export default function Home() {
       </Head>
       <main>
         <Header/>
-        <MapComponent/>
-        
+        <div className="container">
+          <div className="flex flex-row justify-center flex-wrap gap-10 pt-5">
+            <div className="flex-none">
+              <Image/>
+            </div>
+            <div className="flex-none">
+              <MapComponent/>
+            </div>
+          </div>
+        </div>
       </main>
-      
     </>
   );
 }
@@ -53,3 +61,10 @@ function AuthShowcase() {
     </div>
   );
 }
+
+/*
+npm run dev
+git add -A
+git commit -m "message"
+git push -u origin main
+*/

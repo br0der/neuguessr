@@ -45,6 +45,8 @@ const MapComponent: React.FC = () => {
                 if (marker != null) {
                     marker.remove();
                 }
+                var element = document.querySelector("#guess");
+                element?.classList.remove("btn-outline");
                 marker = new mapboxgl.Marker({
                     color: "#FF0000",
                     scale: 0.5
@@ -57,12 +59,17 @@ const MapComponent: React.FC = () => {
     }, []);
 
     return (
-        <>
-            <div
-                ref={mapContainer}
-                style={{ width: "400px", height: "300px" }}
-            />
-        </>
+        <div className="card w-96 bg-base-100 shadow-xl">
+            <figure>
+                <div
+                    ref={mapContainer}
+                    style={{ width: "400px", height: "300px" }}
+                />
+            </figure>
+            <div className="card-body">
+                <button id="guess" className="btn btn-outline btn-primary">Guess!</button>
+            </div>
+        </div>
     );
 };
 
