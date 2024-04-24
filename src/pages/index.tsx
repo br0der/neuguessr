@@ -1,17 +1,20 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-
 import { api } from "~/utils/api";
 import { Header } from "../components/Header";
 import MapComponent from "../components/MapComponent";
+import MapWrapper from "../components/MapWrapper";
 import Image from "../components/Image";
-// import { Main } from "next/document";
+import MapC from "../components/MapC";
+// import MapTiler from "~/components/MapTiler";
+import dynamic from "next/dynamic";
 
+const MapTiler = dynamic(() => import('~/components/Map/MapTiler'), {
+  ssr: false
+});
 
 export default function Home() {
-  // const hello = api.post.hello.useQuery({ text: "from tRPC" });
-  // var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
   return (
     <>
@@ -25,7 +28,7 @@ export default function Home() {
         <Header/>
         <div className="container">
           <div className="flex flex-row justify-center flex-wrap gap-10 pt-5">
-            <div className="flex-none">
+            <div className="flex-1">
               <Image/>
             </div>
             <div className="flex-none">
