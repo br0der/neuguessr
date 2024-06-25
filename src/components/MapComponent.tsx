@@ -2,6 +2,8 @@
 import React, { useEffect, useRef } from "react";
 import mapboxgl, { GeoJSONSourceRaw, Marker, NavigationControl, Point } from "mapbox-gl";
 import { useState } from "react";
+import { api } from "~/utils/api";
+import { useSession } from "next-auth/react";
 
 interface MovingObject {
     id: number;
@@ -10,11 +12,18 @@ interface MovingObject {
 }
 
 
-
+let marker: Marker | null;
+marker = null;
 
 const MapComponent: React.FC = () => {
     const mapContainer = useRef<HTMLDivElement>(null);
-    let marker: Marker | null;
+    
+    const { data: sessionData } = useSession();
+
+    const editMarker = api.guess.create.useMutation({});
+    const test = api.post.hello.useQuery(
+        { text: "brady" }
+    );
 
     useEffect(() => {
         mapboxgl.accessToken = "pk.eyJ1IjoiYnJvZGVyIiwiYSI6ImNsdjAydnA4OTFpYnUyam53aGttdTY2YXEifQ.RbaS01yNmJsVRsCKgpEP2A";
@@ -50,7 +59,10 @@ const MapComponent: React.FC = () => {
                 marker = new mapboxgl.Marker({
                     color: "#FF0000",
                     scale: 0.5
-                }).setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map);
+                })
+                marker.setLngLat([e.lngLat.lng, e.lngLat.lat])
+                marker.addTo(map);
+                console.log(marker)
             })
 
             // Clean up on unmount
@@ -67,7 +79,31 @@ const MapComponent: React.FC = () => {
                 />
             </figure>
             <div className="card-body">
-                <button id="guess" className="btn btn-outline btn-primary">Guess!</button>
+                <button 
+                    id="guess" 
+                    className="btn btn-outline btn-primary"
+                    onClick={
+                        () => {
+                            if (marker == null) {
+                                console.log(marker)
+                                console.log("marker not found")
+                            }
+                            else {
+                                console.log(marker?.getLngLat().lat + " " + marker?.getLngLat().lng)
+                                // api.guess.create.useMutation({}).mutate({
+                                //     challenge: "1",
+                                //     latitude: marker?.getLngLat().lat,
+                                //     longitude: marker?.getLngLat().lng
+                                // })} 
+                                console.log(test.data?.greeting);
+                                editMarker.mutate({
+                                    challenge: "1",
+                                    latitude: marker?.getLngLat().lat,
+                                    longitude: marker?.getLngLat().lng, 
+                                })
+                            }
+                        }}
+                >Guess!</button>
             </div>
         </div>
     );

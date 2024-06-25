@@ -9,21 +9,23 @@ import {
 export const guessRouter = createTRPCRouter({
     create: protectedProcedure
     .input(z.object({ 
-      latitude: z.number(),
-      longitude: z.number(),
       challenge: z.string(),
+      latitude: z.number().or(z.undefined()),
+      longitude: z.number().or(z.undefined()),
+      
      }))
     .mutation(async ({ ctx, input }) => {
       // simulate a slow db call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      return ctx.db.guess.create({
-        data: {
-          lat: input.latitude,
-          lng: input.longitude,
-          guesser_id: ctx.session.user.id,
-          challenge_id: input.challenge
-        },
-      });
+      if (input.latitude && input.longitude) {
+        return ctx.db.guess.create({
+          data: {
+            lat: input.latitude,
+            lng: input.longitude,
+            guesser_id: ctx.session.user.id,
+            challenge_id: input.challenge
+          },
+        });
+      }
     }),
 });
